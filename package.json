@@ -1,0 +1,18 @@
+{
+  "name": "pushserver",
+  "version": "1.0.0",
+  "description": "a simple node server to listen to firebase and send push notifications to ionic",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "btoa": "^1.1.2",
+    "firebase": "^2.2.4",
+    "lodash-node": "^3.8.0",
+    "request": "^2.55.0"
+  }
+}
