@@ -5,11 +5,13 @@ var btoa = require('btoa');
 var _ = require('lodash-node');
 
 var ROOM_TO_DEVICE_TOKENS_MAP = {};
-var ref = new Firebase("https://tvchat-prod.firebaseio.com/");
 
-var PRIVATE_API_KEY = '75aa8799c8eff4d5af4f305ff6ccb0492bd144c1060228e0';
-var APP_ID = 'ea3f5ce9';
-var AUTH_TOKEN = 'bKUli0nYyLdwasqZInHgOhzGlN56doAp2665laPr';
+var FIREBASE_REF = new Firebase("<PATH-TO-FILEBASE>");
+var FIREBASE_AUTH_TOKEN = '<YOUR-FIREBASE-AUTH-SECRET>';
+
+var IONIC_PRIVATE_API_KEY = '<YOUR-PRIVATE-IONIC-APP-KEY>'; // Get this form the apps dashboard, under app settings.
+var IONIC_APP_ID = '<YOUR-APP-ID>';
+
 
 //
 // Create a map of the roomID to a list of device tokens for users who
@@ -60,8 +62,8 @@ function sendPush(message) {
 				}
 			},
 			headers: {
-				'Authorization': 'Basic ' + btoa(PRIVATE_API_KEY + ":"),
-				'X-Ionic-Application-Id': APP_ID
+				'Authorization': 'Basic ' + btoa(IONIC_PRIVATE_API_KEY + ":"),
+				'X-Ionic-Application-Id': IONIC_APP_ID
 			}
 		}, function (error, response, body) {
 			console.log(body);
@@ -76,7 +78,7 @@ function sendPush(message) {
 function listenToMessages() {
 	console.log("Listening to firebase for new messages");
 	var ignoreMessage = true;
-	ref.child("messages").limitToLast(1).on("child_added", function (snapshot) {
+	FIREBASE_REF.child("messages").limitToLast(1).on("child_added", function (snapshot) {
 		// Ignore first message
 		if (ignoreMessage) {
 			ignoreMessage = false;
@@ -92,7 +94,7 @@ function listenToMessages() {
 // database.
 //
 function authenticate () {
-	ref.authWithCustomToken(AUTH_TOKEN, function(error, result) {
+	FIREBASE_REF.authWithCustomToken(FIREBASE_AUTH_TOKEN, function(error, result) {
 	  if (error) {
 	    console.log("Authentication Failed!", error);
 	  } else {
@@ -108,7 +110,7 @@ function authenticate () {
 // push notifications to.
 //
 function loadAllUsers() {
-	ref.child("users").on("value", function (snapshot) {
+	FIREBASE_REF.child("users").on("value", function (snapshot) {
 		parseUsers(snapshot.val());
 	});
 }
